@@ -1,3 +1,4 @@
+
 ﻿Aplicação Frente de Caixa:
 
 arquitetura inicial para construção de um projeto frente de caixa e integração com maquininha de cartão.
