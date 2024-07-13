@@ -1,0 +1,56 @@
+﻿@using MudBlazor
+
+ 
+        <MudNavMenu>
+    <MudNavGroup Icon="@Icons.Material.Filled.ShoppingBag" Title="Home" @bind-Expanded=_isExpanded_home>
+        <MudNavLink Href="/">Relatorios</MudNavLink>
+    </MudNavGroup>
+            <MudNavGroup  Icon="@Icons.Material.Filled.ShoppingBag" Title="Vendas" @bind-Expanded=_isExpanded_vendas>
+                <MudNavLink Href="/nova_venda">Nova Venda</MudNavLink>
+                <MudNavLink Href="/lista_vendas">Listar vendas</MudNavLink>
+            </MudNavGroup>
+
+            <MudNavGroup Icon="@Icons.Material.Filled.GifBox" Title="Produtos" @bind-Expanded=_isExpanded_produtos>
+                <MudNavLink Href="/cadastrar_produtos">Cadastrar Produtos</MudNavLink>
+                <MudNavLink Href="/listar_produtos">Cadastrar Categorias</MudNavLink>
+                <MudNavLink Href="/cadastrar_produtos">Cadastrar Marcas</MudNavLink>
+            </MudNavGroup>
+
+            <MudNavGroup Icon="@Icons.Material.Filled.Group" Title="Pessoas" @bind-Expanded=_isExpanded_pessoas>
+                <MudNavLink Href="/users">Users</MudNavLink>
+                <MudNavLink Href="/security">Security</MudNavLink>
+            </MudNavGroup>
+
+            <MudNavGroup Icon="@Icons.Material.Filled.FireTruck" Title="Fornecedores" @bind-Expanded=_isExpanded_fornecedores>
+                <MudNavLink Href="/users">Users</MudNavLink>
+                <MudNavLink Href="/security">Security</MudNavLink>
+            </MudNavGroup>
+
+            <MudNavGroup Icon="@Icons.Material.Filled.Payments" Title="Financeiro" @bind-Expanded=_isExpanded_settings>
+                 <MudNavLink Href="/caixa">Caixa</MudNavLink>
+                 <MudNavLink Href="/conta_apagar">Contas a Pagar</MudNavLink>
+                <MudNavLink Href="/conta_areceber">Contas a Receber</MudNavLink>
+                <MudNavLink Href="/conta_categorias">Contas Categorias</MudNavLink>
+            </MudNavGroup>
+
+            <MudNavGroup Icon="@Icons.Material.Filled.Settings" Title="Configurações" @bind-Expanded=_isExpanded_settings>
+                <MudNavLink Href="/payments">Maquininha</MudNavLink>
+                <MudNavLink Href="/notafiscal">Nota Fiscal</MudNavLink>
+                <MudNavLink Href="/hadwares">outras</MudNavLink>
+            </MudNavGroup>
+        </MudNavMenu>
+
+
+
+@code
+{
+    bool _isExpanded_vendas = false;
+    bool _isExpanded_produtos =false;
+    bool _isExpanded_pessoas = false;
+    bool _isExpanded_fornecedores = false;
+    bool _isExpanded_settings = false;
+    bool _isExpanded_home = false;
+    bool open = true;
+
+ 
+}

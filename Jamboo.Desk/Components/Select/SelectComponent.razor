@@ -1,0 +1,54 @@
+﻿@using Jamboo.Application.Models
+@using Jamboo.Desk.Components.Objetos
+@using MudBlazor
+
+
+<MudSelect Class="Classe" Dense="true" @bind-Value="selectedValue" T="UsuarioViewModel" Label="@Elemento.Label" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" OnChange="NotifyParent">
+    @foreach (var usuario in Elemento.Usuarios)
+    {
+        if (usuario.IsFuncionario  &&  IsFuncionario)
+        {
+            <MudSelectItem Value="usuario"><img src="https://upload.wikimedia.org/wikipedia/commons/4/41/Flag_of_Austria.svg" height="14" class="mr-1" /> @usuario.Name @usuario.SobreNome</MudSelectItem>
+        }
+        else if (IsFuncionario == false)
+        {
+            <MudSelectItem Value="usuario"> @usuario.Name @usuario.SobreNome</MudSelectItem>
+        }
+
+    }
+</MudSelect>
+
+@code {
+
+
+    private UsuarioViewModel selectedValue;
+
+    [EditorRequired]
+    [Parameter]
+    public SelectComponent Elemento { get; set; }
+
+    [Parameter]
+    public bool IsFuncionario { get; set; } = false;
+
+    [Parameter]
+    public string Icon { get; set; }
+
+    [Parameter]
+    public Variant Variant { get; set; } = Variant.Filled;
+
+    [EditorRequired]
+    [Parameter]
+    public EventCallback<string> OnSelectUserChanged { get; set; }
+
+    [Parameter]
+    public string Classe { get; set; } = string.Empty;
+
+    private Task NotifyParent(UsuarioViewModel value)
+    {
+        string id = value.Id.ToString();
+        //
+        return OnSelectUserChanged.InvokeAsync(id);
+    }
+
+
+}

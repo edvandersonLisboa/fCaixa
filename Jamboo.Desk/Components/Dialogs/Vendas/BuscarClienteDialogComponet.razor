@@ -1,0 +1,168 @@
+﻿@using Jamboo.Application.Models
+@using MudBlazor
+@using System.Net.Http.Json
+@inject ISnackbar Snackbar
+
+<style>
+    .selected {
+        background-color: #1E88E5 !important;
+    }
+
+        .selected > td {
+            color: white !important;
+        }
+
+            .selected > td .mud-input {
+                color: white !important;
+            }
+</style>
+<MudDialog>
+    <DialogContent>
+        <MudTable T="UsuarioViewModel" Items="@clientes" Breakpoint="Breakpoint.Sm" ServerData="@(new Func<TableState, Task<TableData<UsuarioViewModel>>>(ServerReload))"
+                  OnRowClick="@RowClick" Dense="true" Hover="true" @ref="table" RowClassFunc="@SelectedRowClassFunc">
+            <ToolBarContent>
+
+                <MudTextField T="string" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start"
+                            AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+            </ToolBarContent>
+       
+            <HeaderContent>
+                <MudTh><MudTableSortLabel SortLabel="Name" T="UsuarioViewModel">Nome</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortLabel="Email" T="UsuarioViewModel">Email</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortLabel="Dataascimento" T="UsuarioViewModel">DataNascimento</MudTableSortLabel></MudTh>
+            </HeaderContent>
+            <RowTemplate >
+                    <MudTd DataLabel="Name">@context.Name @context.SobreNome</MudTd>
+                    <MudTd DataLabel="Email">@context.Email</MudTd>
+                    <MudTd DataLabel="DataNascimento">@context.DataNascimeto</MudTd>
+            </RowTemplate>
+            <NoRecordsContent>
+                <MudText>No matching records found</MudText>
+            </NoRecordsContent>
+            <LoadingContent>
+                <MudText>Loading...</MudText>
+            </LoadingContent>
+            <PagerContent>
+                <MudTablePager />
+            </PagerContent>
+        </MudTable>
+        @if (_selectedItem != null)
+        {
+            <MudText>@_selectedItem.Name @_selectedItem.SobreNome </MudText>
+        }
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancelar</MudButton>
+        <MudButton OnClick="Submit">Enviar</MudButton>
+    </DialogActions>
+</MudDialog>
+
+
+
+
+@code {
+    [CascadingParameter]
+    public MudDialogInstance ModalInstance { get; set; }
+
+    public UsuarioViewModel usuario = new UsuarioViewModel();
+    public IEnumerable<UsuarioViewModel> clientes = new List<UsuarioViewModel>();
+    private UsuarioViewModel _selectedItem;
+    private int selectedRowNumber = -1;
+    private IEnumerable<UsuarioViewModel> pagedData;
+    private MudTable<UsuarioViewModel> table;
+    private string searchString = null;
+
+    private int totalItems;
+
+    protected override async Task OnInitializedAsync()
+    {
+        clientes = usuario.list();
+    }
+
+    private void Submit()
+    {
+        Snackbar.Add("selected Usuario", Severity.Success);
+        ModalInstance.Close(DialogResult.Ok(_selectedItem.Id));
+    }
+    private void Cancel()
+    {
+        ModalInstance.Close();
+    }
+    void RowClick(TableRowClickEventArgs<UsuarioViewModel> args)
+    {
+        _selectedItem = args.Item;
+
+    }
+    private void OnSearch(string text)
+    {
+        searchString = text;
+        var valid = table.FilteredItems.Where(p => p.Name == searchString).ToList();
+        if (!valid.Any())
+        {
+            _selectedItem = null;
+            SelectedRowClassFunc(_selectedItem, 0);
+        }
+        table.ReloadServerData();
+    }
+
+    private void OnRowClick(UsuarioViewModel item)
+    {
+        _selectedItem = item;
+    }
+
+
+    private async Task<TableData<UsuarioViewModel>> ServerReload(TableState state)
+    {
+        IEnumerable<UsuarioViewModel> data = clientes;
+        await Task.Delay(300);
+        data = data.Where(element =>
+        {
+            if (string.IsNullOrWhiteSpace(searchString))
+                return true;
+            if (element.Name.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+                return true;
+            if (element.SobreNome.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+                return true;
+            if ($"{element.Name} {element.SobreNome} {element.Email}".Contains(searchString))
+                return true;
+            return false;
+        }).ToArray();
+        totalItems = data.Count();
+        switch (state.SortLabel)
+        {
+            case "name":
+                data = data.OrderByDirection(state.SortDirection, o => o.Name);
+                break;
+            case "email":
+                data = data.OrderByDirection(state.SortDirection, o => o.Email);
+                break;
+            case "data_nascimento":
+                data = data.OrderByDirection(state.SortDirection, o => o.DataNascimeto);
+                break;
+        }
+        
+        pagedData = data.Skip(state.Page * state.PageSize).Take(state.PageSize).ToArray();
+
+        return new TableData<UsuarioViewModel>() { TotalItems = totalItems, Items = pagedData };
+    }
+
+    private string SelectedRowClassFunc(UsuarioViewModel element, int rowNumber)
+    {
+        if (selectedRowNumber == rowNumber && _selectedItem == null)
+        {
+            selectedRowNumber = -1;
+            // clickedEvents.Add("Selected Row: None");
+            return string.Empty;
+        }
+        else if (table.SelectedItem != null && table.SelectedItem.Equals(element) && _selectedItem != null)
+        {
+            selectedRowNumber = rowNumber;
+            // clickedEvents.Add($"Selected Row: {rowNumber}");
+            return "selected";
+        }
+        else
+        {
+            return string.Empty;
+        }
+    }
+}

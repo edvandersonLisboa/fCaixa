@@ -1,0 +1,175 @@
+﻿@page "/nova_venda"
+@inject IDialogService DialogService
+@using System.ComponentModel.DataAnnotations;
+@using Jamboo.Application.Models
+@using Jamboo.Desk.Components.Dialogs.Vendas;
+@using MudBlazor
+@using Jamboo.Desk.Components.Dialogs.Buttons;
+@using Jamboo.Desk.Components.Select
+
+
+<MudContainer Class="mt-3 px-5" MaxWidth="MaxWidth.False">
+    <MudGrid>
+        <MudItem xs="12" sm="8">
+            <MudGrid>
+
+                <MudItem xs="12">
+                    <MudCard Elevation="2" Style="height: 250px;">
+                        <MudCardHeader class="pb-0 pt-0">
+                            <MudIconButton Icon="@Icons.Material.Filled.Group" Color="Color.Default" />
+                            <MudText Typo="Typo.h6">Clientes e Vendedores</MudText>
+                        </MudCardHeader>
+                        <MudDivider />
+                        <MudCardContent>
+                            <SelectComponent Elemento="vendedores" OnSelectUserChanged="HandleClienteChanged" />
+                           
+                            <MudItem Class="d-flex ">
+                                @if(cliente == null)
+                                {
+                                    <MudTextField class=" d-inline pr-2 " @bind-Value="cliente.Name" Placeholder="nenhum cliente selecionado" Variant="Variant.Outlined" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" />
+                                }
+                                else
+                                {
+                                    <MudTextField class=" d-inline pr-2 " @bind-Value="cliente.Name"  Variant="Variant.Outlined" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" />
+                                }
+                                
+                                <ButtonDialogComponent Text="Cliente selecionado" Classe="mt-2" Icon="@Icons.Material.Filled.Add" Variant="Variant.Filled" Color="Color.Success" OnClick="OpenBuscarClienteModal" />
+                            </MudItem>
+                            
+                            <ButtonDialogComponent Text="Cadastrar Novo Cliente" Classe="mt-2" Icon="@Icons.Material.Filled.Add" Variant="Variant.Filled" Color="Color.Success" OnClick="OpenCreateClienteModal" />
+
+                        </MudCardContent>
+                    </MudCard>
+                </MudItem>
+                <MudItem xs="12">
+                    <div class="d-flex justify-center align-center flex-grow-1">
+                        <MudTextField class=" d-inline pr-2 " @bind-Value="user" Placeholder="Buscar pelo codigo de barra" Variant="Variant.Outlined" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" />
+                        <ButtonDialogComponent Text="Buscar Produto" Classe="mt-2" Icon="@Icons.Material.Filled.Add" Variant="Variant.Filled" Color="Color.Success" OnClick="OpenSeachProdutoModal" />
+                    </div>
+                </MudItem>
+            </MudGrid>
+        </MudItem>
+        <MudItem xs="12" sm="4">
+
+            <MudCard Elevation="2" Style="height: 100%;">
+                <MudCardHeader class="pb-0 pt-0">
+                    <MudIconButton Icon="@Icons.Material.Filled.Group" Color="Color.Default" />
+                    <span>Resumo da venda</span>
+                </MudCardHeader>
+                <MudDivider />
+                <MudCardContent class="pr-0 pl-0 ml-0 mr-0 ">
+                    <MudItem xs="12" class="d-flex justify-space-between ml-1 mr-1 pb-0 pt-5">
+                        <section>
+                            <span>Subtotal</span>
+                        </section>
+                        <section>
+                            <span>R$ 0,20</span>
+                        </section>
+                    </MudItem>
+                    <MudDivider />
+                    <MudItem xs="12" class="d-flex justify-space-between ml-1 mr-1 pb-0 pt-5">
+                        <section>
+                            <span>Desconto</span>
+                        </section>
+                        <section>
+                            <MudChip Text="Brunsås" Variant="Variant.Text" Color="Color.Success" SelectedColor="Color.Primary">- 10%</MudChip>
+                        </section>
+                    </MudItem>
+                    <MudDivider />
+                    <MudItem xs="12" class="d-flex justify-space-between ml-1 mr-1 pb-0 pt-5">
+                        <section>
+                            <span>Total</span>
+                        </section>
+                        <section>
+                            <span>R$ 0,20</span>
+                        </section>
+                    </MudItem>
+                    <MudDivider />
+                    <MudItem xs="12" class="d-flex justify-space-between ml-1 mr-1 pb-0 pt-5">
+                        <MudSelect Dense="true" T="string" Label="Forma de Pagamento" Variant="Variant.Outlined">
+                            <MudSelectItem Value="@("Tyrannosaur")" />
+                            <MudSelectItem Value="@("Triceratops")" />
+                            <MudSelectItem Value="@("Mike Rex")" />
+                        </MudSelect>
+                    </MudItem>
+                </MudCardContent>
+                <MudDivider />
+                <MudCardActions class="d-flex justify-space-between" style="">
+                    <MudButton class="mt-2" Variant="Variant.Filled" Color="Color.Info">
+                        <MudIcon Icon="@Icons.Material.Filled.AttachMoney" /> Finalizar
+                    </MudButton>
+                    <ButtonDialogComponent Text="Cancelar" Classe="mt-2" Icon="@Icons.Material.Filled.RestoreFromTrash" Variant="Variant.Filled" Color="Color.Error" OnClick="OpenValidCalcelamentoModal" />
+                </MudCardActions>
+            </MudCard>
+        </MudItem>
+    </MudGrid>
+</MudContainer>
+@code {
+    public string user { get; set; } = string.Empty;
+    public UsuarioViewModel usuario { get; set; } = new UsuarioViewModel();
+
+    public IEnumerable<UsuarioViewModel> usuarios = new List<UsuarioViewModel>();
+    public SelectComponent clientes { get; set; } = new SelectComponent();
+    public SelectComponent vendedores { get; set; } = new SelectComponent();
+
+    public UsuarioViewModel cliente { get; set; } = new UsuarioViewModel();
+
+
+    protected override void OnInitialized()
+    {
+
+        usuarios = usuario.list();
+        this.vendedores.Label = "Vendedor";
+        clientes.Usuarios = usuarios;
+        vendedores.Usuarios = usuarios.Where(p => p.IsFuncionario == true);
+
+
+    }
+
+    private async Task HandleClienteChanged(string id)
+    {
+
+        cliente = this.clientes.Usuarios.ToList().FirstOrDefault(p=> p.Id == Convert.ToInt32(id));
+
+    }
+
+    private void OpenSeachProdutoModal()
+    {
+        DialogService.Show<SerachProdutoDialogComponent>("Procurar Produtos", new DialogOptions
+        {
+            CloseButton = true
+        });
+    }
+
+    private async Task OpenCreateClienteModal()
+    {
+
+        var dialog = await DialogService.ShowAsync<CreateClienteDialogComponent>("Cadastrar Novo Cliente", new DialogOptions{ CloseButton = true});
+
+
+    }
+
+    private void OpenValidCalcelamentoModal()
+    {
+        DialogService.Show<ValidarCancelamentoDialogComponent>("Cadastrar Novo Cliente", new DialogOptions
+            {
+                CloseButton = true
+            });
+    }
+
+    private async Task OpenBuscarClienteModal()
+    {
+        var dialog = await DialogService.ShowAsync<BuscarClienteDialogComponet>("Buscar Clientes", new DialogOptions
+            {
+                CloseButton = true
+            });
+        DialogResult resultId = await dialog.Result;
+
+        if (!resultId.Cancelled)
+        {
+            Int32.TryParse(resultId.Data.ToString(), out Int32 clientId);
+            cliente = clientes.Usuarios.FirstOrDefault(p => p.Id == clientId);
+            cliente.Name = cliente.Name+" "+cliente.SobreNome;
+        }
+    }
+}

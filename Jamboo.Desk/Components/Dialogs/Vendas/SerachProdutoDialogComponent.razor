@@ -1,0 +1,23 @@
+@using MudBlazor
+
+<MudDialog>
+    <DialogContent>
+        Aqui fica o fornulario procurar produtos
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancelar</MudButton>
+        <MudButton OnClick="Submit">Enviar</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code{
+    [CascadingParameter]
+    public MudDialogInstance? ModalInstance { get; set; }         
+
+    private void Submit(){
+        ModalInstance.Close();
+    }
+    private void Cancel(){
+        ModalInstance.Close();
+    }
+}
