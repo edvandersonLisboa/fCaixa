@@ -1,0 +1,214 @@
+﻿@page "/venda"
+@using Blazored.Typeahead
+
+<div class="container text-center">
+    <div class="row mb-1">
+        <div class="col-8" style="">
+            <div class="row mb-2">
+                <div class="card p-2">
+                    <div class="card-body">
+                        <article class="flex col">
+                                <div class="input-group mb-3">
+                                   <BlazoredTypeahead SearchMethod="ProcuraArtigos"  @bind-Value="ArtigoSelecionado">
+                                         <SelectedTemplate>
+                                            @context.Titulo
+                                        </SelectedTemplate>
+                                        <ResultTemplate>
+                                            @context.Titulo <strong> by @context.Autor </strong>
+                                        </ResultTemplate>
+                                    </BlazoredTypeahead>
+                                </div>
+                        </article>
+                        <article class="flex col">
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="button-addon2">
+                                <button class="btn btn-outline-secondary" type="button" id="button-addon2">Buscar Cliente</button>
+                            </div>
+                        </article>
+                     
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="card p-2" style="height:300px; overflow-y:auto">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Produto</th>
+                                <th scope="col">Preço</th>
+                                <th scope="col">Total</th>
+                                <th scope="col">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-group-divider">
+                            <tr>
+                                <th scope="row">1</th>
+                                <td>Mark</td>
+                                <td>Otto</td>
+                                <td>mdo</td>
+                                <td>X</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">1</th>
+                                <td>Mark</td>
+                                <td>Otto</td>
+                                <td>mdo</td>
+                                <td>X</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">1</th>
+                                <td>Mark</td>
+                                <td>Otto</td>
+                                <td>mdo</td>
+                                <td>X</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">1</th>
+                                <td>Mark</td>
+                                <td>Otto</td>
+                                <td>mdo</td>
+                                <td>X</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">1</th>
+                                <td>Mark</td>
+                                <td>Otto</td>
+                                <td>mdo</td>
+                                <td>X</td>
+                            </tr>                         
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-4 mb-2">
+            <div class="card me-2" style="height:100%">
+                <div class="card-body">
+                    <section class="m-2">
+                        <label for="basic-url" class="form-label">Valor Total da Compra</label>
+                        <div class="input-group mb-2">
+                            <input type="text" class="form-control" placeholder="R$0,00" aria-label="Recipient's username" aria-describedby="button-addon2">
+                        </div>
+                    </section>
+                    <hr />
+                    <section class="m-2">
+                        <select class="form-select" aria-label="Default select example">
+                            <option selected>Dinheiro</option>
+                            <option value="1">Cartão de crédito</option>
+                            <option value="2">Cartão de Debito</option>
+                            <option value="3">Vr</option>
+                            <option value="3">VA</option>
+                        </select>
+                    </section>
+                    <hr/>
+                    <section class="m-2">
+                        <label>Valor Pago</label>
+                        <div class="input-group mb-2">
+                            <input type="text" class="form-control" placeholder="R$0,00" aria-label="Recipient's username" aria-describedby="button-addon2">
+                        </div>
+                    </section>
+                    <section class="m-2">
+                        <label>Troco</label>
+                        <div class="input-group mb-2">
+                            <input type="text" class="form-control" placeholder="R$0,00" aria-label="Recipient's username" aria-describedby="button-addon2">
+                        </div>
+                    </section>
+                    <section class="m-2">
+                        <label>Falta pagar</label>
+                        <div class="input-group mb-2">
+                            <input type="text" class="form-control" placeholder="R$0,00" aria-label="Recipient's username" aria-describedby="button-addon2">
+                        </div>
+                    </section>
+                    <button class="btn btn-danger"> finalizar Compra</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="card">
+            <article class="flex mt-4">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Buscar produtos" aria-label="Buscar produtos" aria-describedby="button-addon2">
+                </div>
+            </article>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Produto</th>
+                        <th scope="col">Preço</th>
+                        <th scope="col">Total</th>
+                        <th scope="col">Ações</th>
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider">
+                    <tr>
+                        <th scope="row">1</th>
+                        <td>Mark</td>
+                        <td>Otto</td>
+                        <td>mdo</td>
+                        <td>X</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">1</th>
+                        <td>Mark</td>
+                        <td>Otto</td>
+                        <td>mdo</td>
+                        <td>X</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">1</th>
+                        <td>Mark</td>
+                        <td>Otto</td>
+                        <td>mdo</td>
+                        <td>X</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+@code {
+    private Artigo ArtigoSelecionado;
+
+
+    public class Artigo
+    {
+        public string Titulo { get; set; }
+        public string Autor { get; set; }
+        public Artigo(string titulo, string autor)
+        {
+            Titulo = titulo;
+            Autor = autor;
+        }
+    }
+     private List<Artigo> artigos;
+    protected override void OnInitialized()
+    {
+         ArtigoService artigoServico = new ArtigoService();
+         artigos = artigoServico.GetArtigos();
+    }
+    private async Task<IEnumerable<Artigo>> ProcuraArtigos(string criterio)
+    {
+        return await Task.FromResult(artigos.Where(
+              x => x.Titulo.ToLower().Contains(criterio.ToLower()) ||
+                   x.Autor.ToLower().Contains(criterio.ToLower())).ToList());
+    }
+
+    public class ArtigoService
+    {
+        public List<Artigo> GetArtigos()
+        {
+            var artigos = new List<Artigo> {
+            new Artigo("Marcelo", "Vendedor"),
+            new Artigo("Marcos", "Gerente"),
+            new Artigo("Cintia", "Estoquista"),
+            new Artigo("Mariano", "vendedor"),
+            new Artigo("isabela", "Macoratti") };
+            return artigos;
+        }
+    }
+}
